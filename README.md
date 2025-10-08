@@ -13,8 +13,7 @@ Frameworks/Tools: Node.js, PostgreSQL, Render (hosting), Visual Studio Code
 Integrations: Email, SMS, Discord, Slack (for reminders and alerts)
 
 ✅ Success Criteria
-
-FitLog will be considered successful if:
+RnR will be considered successful if:
 
 Users can reliably log their workouts (date, exercise, weights, notes).
 
