@@ -1,0 +1,349 @@
+/* ================================
+   🌟 CALENDAR PAGE STYLING (FIXED)
+================================ */
+.calendar-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff5f0 0%, #fff 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  font-family: "Inter", sans-serif;
+}
+
+/* ================================
+   🏋️ HEADER + BUTTON
+================================ */
+.calendar-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.calendar-header h1 {
+  color: #ff4d6d;
+  font-size: 2.2rem;
+  margin-bottom: 0.8rem;
+  font-weight: 700;
+}
+
+.log-workout-btn {
+  background: linear-gradient(90deg, #ff4d6d, #ff9966);
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1.6rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.log-workout-btn:hover {
+  background: linear-gradient(90deg, #ff9966, #ff4d6d);
+  transform: translateY(-2px);
+}
+
+/* ================================
+   🗓️ CALENDAR CONTAINER
+================================ */
+.calendar-wrapper {
+  width: 90%;
+  max-width: 800px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  margin-top: 1rem;
+  position: relative;
+}
+
+.month-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.month-title {
+  color: #ff4d6d;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.nav-btn {
+  background-color: #ffe1d3;
+  color: #ff4d6d;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease-in-out, transform 0.1s ease;
+}
+
+.nav-btn:hover {
+  background-color: #ffb3a1;
+  transform: translateY(-1px);
+}
+
+/* ================================
+   📅 CALENDAR GRID + CELLS
+================================ */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+.day-label {
+  text-align: center;
+  font-weight: 600;
+  color: #ff9966;
+  padding-bottom: 0.4rem;
+}
+
+.empty-day {
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.day-cell {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: #fafafa;
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  position: relative;
+  cursor: pointer;
+  min-width: 0;
+  min-height: 0;
+}
+
+.day-cell:hover {
+  background-color: #ffeae1;
+}
+
+.day-num {
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 600;
+  z-index: 5;
+}
+
+/* ================================
+   ✅ LOGGED DAYS (ZERO SHIFTING)
+================================ */
+.day-cell.logged {
+  background: linear-gradient(135deg, #ff4d6d 0%, #ff9966 100%);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(255, 77, 109, 0.4);
+  border: none;
+}
+
+.day-cell.logged:hover {
+  box-shadow: 0 6px 16px rgba(255, 77, 109, 0.5);
+  filter: brightness(1.05);
+}
+
+.day-cell.logged .day-num {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ================================
+   🧩 MODAL STYLING
+================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  backdrop-filter: blur(2px);
+}
+
+.modal-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  width: 420px;
+  max-width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.modal-header h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #ff4d6d;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #ff4d6d;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.close-btn:hover {
+  transform: rotate(90deg);
+}
+
+/* ================================
+   🧱 FORM STRUCTURE & INPUTS
+================================ */
+.form-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.half {
+  flex: 1 1 48%;
+}
+
+.form-group.third {
+  flex: 1 1 30%;
+}
+
+.form-group.full {
+  flex: 1 1 100%;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  font-size: 0.95rem;
+  background-color: #fff;
+  color: #333;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #ff9966;
+  box-shadow: 0 0 0 3px rgba(255, 153, 102, 0.15);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ================================
+   💾 BUTTONS (SAVE / CANCEL)
+================================ */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.save-btn,
+.cancel-btn {
+  flex: 1;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.save-btn {
+  background: linear-gradient(90deg, #ff4d6d, #ff9966);
+  color: #fff;
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 77, 109, 0.3);
+}
+
+.cancel-btn {
+  background: #f2f2f2;
+  color: #666;
+}
+
+.cancel-btn:hover {
+  background: #e6e6e6;
+  transform: translateY(-2px);
+}
+
+/* ================================
+   📱 RESPONSIVE DESIGN
+================================ */
+@media (max-width: 768px) {
+  .calendar-wrapper {
+    width: 95%;
+    padding: 1rem;
+  }
+
+  .calendar-grid {
+    gap: 0.3rem;
+  }
+
+  .day-cell {
+    font-size: 0.9rem;
+  }
+
+  .modal-box {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  .form-group.half,
+  .form-group.third {
+    flex: 1 1 100%;
+  }
+}

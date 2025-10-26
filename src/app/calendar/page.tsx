@@ -1,91 +1,298 @@
 "use client";
-import AuthGuard from "@/components/AuthGuard";
-import { useMemo, useState } from "react";
-
-function buildMonth(year: number, month: number) {
-  const first = new Date(year, month, 1);
-  const startDay = first.getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const cells = [];
-  for (let i = 0; i < startDay; i++) cells.push(null);
-  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
-  while (cells.length % 7 !== 0) cells.push(null);
-  return cells;
-}
+import React, { useState, useEffect } from "react";
+import "./calendar.css";
 
 export default function CalendarPage() {
-  const today = new Date();
-  const [ym, setYm] = useState({ y: today.getFullYear(), m: today.getMonth() });
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [loggedDays, setLoggedDays] = useState<string[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [workoutName, setWorkoutName] = useState("");
+  const [sets, setSets] = useState("");
+  const [reps, setReps] = useState("");
+  const [weight, setWeight] = useState("");
+  const [notes, setNotes] = useState("");
 
-  const cells = useMemo(() => buildMonth(ym.y, ym.m), [ym]);
-  const monthLabel = new Date(ym.y, ym.m, 1).toLocaleString("default", {
-    month: "long",
-    year: "numeric",
-  });
+  const month = currentDate.getMonth();
+  const year = currentDate.getFullYear();
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const startDay = firstDay.getDay();
+  const daysInMonth = lastDay.getDate();
 
-  const prev = () => {
-    const d = new Date(ym.y, ym.m - 1, 1);
-    setYm({ y: d.getFullYear(), m: d.getMonth() });
+  const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
+  const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
+
+  // Fetch logged workouts
+  const fetchWorkouts = async () => {
+    try {
+      const res = await fetch("/api/workouts");
+      if (!res.ok) throw new Error("Failed to fetch workouts");
+      const data = await res.json();
+      setLoggedDays(data.map((w: any) => w.date));
+    } catch (err) {
+      console.error("Error fetching workouts:", err);
+    }
   };
-  const next = () => {
-    const d = new Date(ym.y, ym.m + 1, 1);
-    setYm({ y: d.getFullYear(), m: d.getMonth() });
+
+  useEffect(() => {
+    fetchWorkouts();
+  }, []);
+
+  // Save workout
+  const saveWorkout = async () => {
+    if (!selectedDate || !workoutName || !sets || !reps) {
+      alert("Please fill in required fields (date, name, sets, reps).");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/workouts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: "demo-user",
+          date: selectedDate,
+          exerciseName: workoutName,
+          sets: parseInt(sets),
+          reps: parseInt(reps),
+          weight: parseInt(weight) || 0,
+          notes,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to save workout");
+
+      setShowModal(false);
+      setSelectedDate("");
+      setWorkoutName("");
+      setSets("");
+      setReps("");
+      setWeight("");
+      setNotes("");
+      fetchWorkouts();
+    } catch (err) {
+      console.error("Error saving workout:", err);
+      alert("Failed to save workout");
+    }
   };
+
+  // Build calendar grid
+  const daysArray = [];
+  for (let i = 0; i < startDay; i++) daysArray.push(null);
+  for (let i = 1; i <= daysInMonth; i++) daysArray.push(i);
 
   return (
-    <AuthGuard>
-      {/*Gradient background to match app theme */}
-      <main className="min-h-screen p-6 bg-gradient-to-b from-pink-100 via-orange-100 to-white">
-        <div className="max-w-4xl mx-auto p-6 bg-white/80 rounded-3xl shadow-lg">
-          <div className="flex items-center justify-between mb-4">
-            <button
-              onClick={prev}
-              className="px-4 py-1.5 rounded-full bg-pink-200 hover:bg-pink-300 text-pink-700 font-medium transition"
-            >
-              ← Prev
-            </button>
+    <div className="calendar-page">
+      {/* Header */}
+      <div className="calendar-header">
+        <h1>💪 Workout Calendar</h1>
+        <button className="log-workout-btn" onClick={() => setShowModal(true)}>
+          + Log Workout
+        </button>
+      </div>
 
-            <h1 className="text-3xl font-bold text-pink-600">{monthLabel}</h1>
+      {/* Month Navigation */}
+      <div className="calendar-wrapper">
+        <div className="month-nav">
+          <button onClick={prevMonth} className="nav-btn">
+            ← Previous
+          </button>
+          <h2 className="month-title">
+            {currentDate.toLocaleString("default", { month: "long" })} {year}
+          </h2>
+          <button onClick={nextMonth} className="nav-btn">
+            Next →
+          </button>
+        </div>
 
-            <button
-              onClick={next}
-              className="px-4 py-1.5 rounded-full bg-orange-200 hover:bg-orange-300 text-orange-700 font-medium transition"
-            >
-              Next →
-            </button>
-          </div>
+        {/* Calendar Grid */}
+        <div className="calendar-grid">
+          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+            <div key={day} className="day-label">
+              {day}
+            </div>
+          ))}
 
-          {/* Weekday headers */}
-          <div className="grid grid-cols-7 gap-2 text-center text-sm font-semibold text-pink-600 mb-2">
-            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-              <div key={d}>{d}</div>
-            ))}
-          </div>
+          {daysArray.map((day, idx) => {
+            if (!day) return <div key={idx} className="empty-day"></div>;
 
-          {/* Day cells */}
-          <div className="grid grid-cols-7 gap-2">
-            {cells.map((d, i) => (
-              <div
-                key={i}
-                className={`aspect-square flex items-center justify-center rounded-2xl border text-base transition
-                ${
-                  d
-                    ? "bg-gradient-to-tr from-pink-50 to-orange-50 hover:from-pink-100 hover:to-orange-100 cursor-pointer text-gray-700 font-medium"
-                    : "bg-transparent text-transparent border-none"
-                }`}
-                onClick={() =>
-                  d &&
-                  (window.location.href = `/log?date=${ym.y}-${String(
-                    ym.m + 1
-                  ).padStart(2, "0")}-${String(d).padStart(2, "0")}`)
-                }
-              >
-                {d ?? ""}
+            const dayString = `${year}-${String(month + 1).padStart(
+              2,
+              "0"
+            )}-${String(day).padStart(2, "0")}`;
+            const isLogged = loggedDays.includes(dayString);
+
+            return (
+              <div key={idx} className={`day-cell ${isLogged ? "logged" : ""}`}>
+                {isLogged ? (
+                  <div className="ring-wrapper">
+                    <svg
+                      width="90"
+                      height="90"
+                      viewBox="0 0 90 90"
+                      className="completion-svg"
+                    >
+                      <circle
+                        cx="45"
+                        cy="45"
+                        r="38"
+                        fill="none"
+                        stroke="url(#gradient1)"
+                        strokeWidth="8"
+                      />
+                      <circle
+                        cx="45"
+                        cy="45"
+                        r="28"
+                        fill="none"
+                        stroke="url(#gradient2)"
+                        strokeWidth="6"
+                      />
+                      <circle cx="45" cy="45" r="20" fill="url(#gradient3)" />
+                      <defs>
+                        <linearGradient
+                          id="gradient1"
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="100%"
+                        >
+                          <stop offset="0%" stopColor="#ff4d6d" />
+                          <stop offset="100%" stopColor="#ff9966" />
+                        </linearGradient>
+                        <linearGradient
+                          id="gradient2"
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="100%"
+                        >
+                          <stop offset="0%" stopColor="#ff9966" />
+                          <stop offset="100%" stopColor="#ffd166" />
+                        </linearGradient>
+                        <linearGradient
+                          id="gradient3"
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="100%"
+                        >
+                          <stop offset="0%" stopColor="#ffd166" />
+                          <stop offset="100%" stopColor="#fff9e6" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                    <span className="day-num-ring">{day}</span>
+                  </div>
+                ) : (
+                  <span className="day-num">{day}</span>
+                )}
               </div>
-            ))}
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Log Workout 💪</h2>
+              <button className="close-btn" onClick={() => setShowModal(false)}>
+                ✕
+              </button>
+            </div>
+
+            <div className="modal-body">
+              {/* Section 1: Date & Exercise */}
+              <div className="form-section">
+                <div className="form-group half">
+                  <label>Date *</label>
+                  <input
+                    type="date"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="form-group half">
+                  <label>Exercise Name *</label>
+                  <input
+                    type="text"
+                    placeholder="e.g., Bench Press"
+                    value={workoutName}
+                    onChange={(e) => setWorkoutName(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Section 2: Sets / Reps / Weight */}
+              <div className="form-section">
+                <div className="form-group third">
+                  <label>Sets *</label>
+                  <input
+                    type="number"
+                    placeholder="4"
+                    value={sets}
+                    onChange={(e) => setSets(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="form-group third">
+                  <label>Reps *</label>
+                  <input
+                    type="number"
+                    placeholder="12"
+                    value={reps}
+                    onChange={(e) => setReps(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="form-group third">
+                  <label>Weight (lbs)</label>
+                  <input
+                    type="number"
+                    placeholder="185"
+                    value={weight}
+                    onChange={(e) => setWeight(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Section 3: Notes */}
+              <div className="form-section">
+                <div className="form-group full">
+                  <label>Notes</label>
+                  <textarea
+                    placeholder="Optional notes..."
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Section 4: Actions */}
+              <div className="modal-actions">
+                <button onClick={saveWorkout} className="save-btn">
+                  Save Workout
+                </button>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="cancel-btn"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </main>
-    </AuthGuard>
+      )}
+    </div>
   );
 }
