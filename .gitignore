@@ -1,28 +1,27 @@
 # dependencies
 node_modules/
 
-# local env vars
-.env
-.env.local
-
 # build outputs
 .next/
 out/
 dist/
-
-# misc
-.DS_Store
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.next/
-out/
-node_modules/
-dist/
 build/
+
+# local environment files
 .env
 .env.*
 !.env.example
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 *.log
-.vscode/
+
+# OS / IDE files
 .DS_Store
+.vscode/
+.history/
+
+# misc cache
+*.cache

@@ -1,37 +1,21 @@
-// lib/mongodb.ts
 import mongoose from "mongoose";
-const MONGODB_URI = process.env.MONGODB_URI as string;
+
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/repsnrecord";
 
 if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable inside .env.local");
-}
-let cached = (global as any).mongoose;
-
-if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
+  throw new Error("⚠️ MONGODB_URI environment variable not set");
 }
 
-async function dbConnect() {
+let isConnected = false;
 
-    try{
-        await mongoose.connect(MONGODB_URI);
-        console.log("MongoDB connected");
-    } catch (error) {
-        console.error("MongoDB connection error:", error);
-    }
+export async function dbConnect() {
+  if (isConnected) return;
 
-    if (cached.conn)
-    {
-        return cached.conn;
-    }
-    
-    if (!cached.promise) 
-    {
-         cached.promise = mongoose.connect(MONGODB_URI).then((mongoose) => mongoose);
-    }
-    
-    cached.com = await cached.promise;
-    return cached.conn;
+  try {
+    const db = await mongoose.connect(MONGODB_URI);
+    isConnected = !!db.connections[0].readyState;
+    console.log("✅ MongoDB connected");
+  } catch (err) {
+    console.error("❌ MongoDB connection error:", err);
+  }
 }
-
-export { dbConnect };
