@@ -25,3 +25,13 @@ yarn-error.log*
 
 # misc cache
 *.cache
+
+# Claude Code Generated files
+CLAUD.md
+
+# Test coverage
+coverage/
+
+# Uploaded files
+public/uploads/
+backend/public/uploads/

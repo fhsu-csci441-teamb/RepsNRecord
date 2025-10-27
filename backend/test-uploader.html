@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <body>
+    <h1>Photo upload test</h1>
+    <form id="f">
+      <div>
+        <label>Photo</label>
+        <input type="file" name="photo" accept="image/*" required />
+      </div>
+      <div>
+        <label>Description</label>
+        <input t\ype="text" name="description" placeholder="Leg day progress" />
+      </div>
+      <div>
+        <label>Taken at</label>
+        <input type="datetime-local" name="takenAt" />
+      </div>
+      <button type="submit">Upload</button>
+    </form>
+    <pre id="out"></pre>
+    <script>
+      const f = document.getElementById('f');
+      const out = document.getElementById('out');
+      f.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = new FormData(f);
+        out.textContent = 'Uploading…';
+        try {
+          const res = await fetch('http://localhost:3001/api/photos', { method: 'POST', body: form });
+          const data = await res.json();
+          out.textContent = JSON.stringify(data, null, 2);
+        } catch (err) {
+          out.textContent = String(err);
+        }
+      });
+    </script>
+  </body>
+</html>
