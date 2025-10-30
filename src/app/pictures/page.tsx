@@ -11,7 +11,7 @@ type Photo = {
   created_at: string;
 };
 
-const BACKEND_URL = "http://localhost:3001";
+const BACKEND_URL = "http://localhost:3000";
 
 export default function PicturesPage() {
   const [photos, setPhotos] = useState<Photo[]>([]);
