@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
 import { useAuth } from "@/lib/useAuth";
 
-export default function LoginPage() {
+function LoginContent() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const params = useSearchParams();
@@ -35,5 +35,19 @@ export default function LoginPage() {
         </button>
       </div>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen grid place-items-center bg-gradient-to-r from-pink-500 to-amber-300">
+        <div className="bg-white/85 p-8 rounded-2xl shadow-xl text-center space-y-6">
+          <h1 className="text-3xl font-black">REPS N RECORD</h1>
+        </div>
+      </main>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }
