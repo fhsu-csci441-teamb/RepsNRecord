@@ -35,3 +35,7 @@ coverage/
 # Uploaded files
 public/uploads/
 backend/public/uploads/
+
+# Vercel / Cloudflare build outputs
+.vercel/
+nul
