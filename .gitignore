@@ -27,7 +27,7 @@ yarn-error.log*
 *.cache
 
 # Claude Code Generated files
-CLAUD.md
+CLAUDE.md
 
 # Test coverage
 coverage/
