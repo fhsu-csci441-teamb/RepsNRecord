@@ -11,6 +11,7 @@ export default function CalendarPage() {
   const [sets, setSets] = useState("");
   const [reps, setReps] = useState("");
   const [weight, setWeight] = useState("");
+  const [intensity, setIntensity] = useState("");
   const [notes, setNotes] = useState("");
 
   const month = currentDate.getMonth();
@@ -57,6 +58,7 @@ export default function CalendarPage() {
           sets: parseInt(sets),
           reps: parseInt(reps),
           weight: parseInt(weight) || 0,
+          intensity: parseInt(intensity) || 0,
           notes,
         }),
       });
@@ -69,6 +71,7 @@ export default function CalendarPage() {
       setSets("");
       setReps("");
       setWeight("");
+      setIntensity("");
       setNotes("");
       fetchWorkouts();
     } catch (err) {
@@ -261,6 +264,18 @@ export default function CalendarPage() {
                     placeholder="185"
                     value={weight}
                     onChange={(e) => setWeight(e.target.value)}
+                  />
+                </div>
+
+                <div className="form-group third">
+                  <label>Intensity</label>
+                  <input
+                    type="number"
+                    placeholder="5"
+                    min={0}
+                    max={5}
+                    value={intensity}
+                    onChange={(e) => setIntensity(e.target.value)}
                   />
                 </div>
               </div>

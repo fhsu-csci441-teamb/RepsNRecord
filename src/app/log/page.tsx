@@ -78,6 +78,7 @@ export default function LogPage() {
                     💪 {workout.sets} sets × {workout.reps} reps
                     {workout.weight > 0 && ` @ ${workout.weight} lbs`}
                   </p>
+                  <p className="text-gray-600">🔥 Intensity: {workout.intensity}/5</p>
                   {workout.notes && (
                     <p className="text-gray-500 text-sm mt-1 italic">
                       "{workout.notes}"
@@ -94,6 +95,14 @@ export default function LogPage() {
             ))}
           </div>
         )}
+        <div>
+          <button
+            className="mt-8 w-full bg-white text-pink-500 font-bold py-3 rounded-2xl shadow-lg hover:shadow-xl transition"
+            onClick={() => window.open('/api/workouts/pdf')}
+          > 
+            Download PDF Report
+          </button>
+        </div>
       </div>
     </div>
   );

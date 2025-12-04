@@ -27,7 +27,7 @@ export async function POST(req: Request) {
   try {
     await connectMongo();
     const body = await req.json();
-    const { userId, date, exerciseName, sets, reps, weight } = body;
+    const { userId, date, exerciseName, sets, reps, weight, intensity, notes } = body;
 
     if (!userId || !date || !exerciseName || !sets || !reps) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -40,6 +40,8 @@ export async function POST(req: Request) {
       sets,
       reps,
       weight,
+      intensity,
+      notes,
     });
 
     return NextResponse.json(newWorkout, { status: 201 });
