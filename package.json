@@ -11,15 +11,13 @@
   "dependencies": {
     "firebase": "^12.4.0",
     "lucide-react": "^0.544.0",
-<<<<<<< HEAD
     "mongodb": "^4.17.2",
-=======
->>>>>>> origin/main
     "mongoose": "^8.19.2",
     "next": "15.5.4",
     "react": "19.1.0",
     "react-circular-progressbar": "^2.2.0",
     "react-dom": "19.1.0",
+    "react-hot-toast": "^2.6.0",
     "recharts": "^3.2.1"
   },
   "devDependencies": {
