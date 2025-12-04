@@ -30,7 +30,7 @@ export default function CalendarPage() {
       const res = await fetch("/api/workouts");
       if (!res.ok) throw new Error("Failed to fetch workouts");
       const data = await res.json();
-      setLoggedDays(data.map((w: any) => w.date));
+      setLoggedDays(data.map((w: { date: string }) => w.date));
     } catch (err) {
       console.error("Error fetching workouts:", err);
     }

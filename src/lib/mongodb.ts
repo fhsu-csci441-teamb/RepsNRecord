@@ -1,22 +1,33 @@
+// src/lib/mongodb.ts
 import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/repsnrecord";
 
-//const MONGODB_URI = process.env.MONGODB_URI;
 if (!MONGODB_URI) {
-  throw new Error("⚠️ MONGODB_URI environment variable not set");
+  throw new Error("Missing MONGODB_URI in .env.local");
 }
 
-let isConnected = false;
+// allow a cached connection in dev to avoid re-connecting on HMR
+declare global {
+  // eslint-disable-next-line no-var
+  var _mongoose:
+    | { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null }
+    | undefined;
+}
+
+let cached = global._mongoose;
+if (!cached) {
+  cached = { conn: null, promise: null };
+  global._mongoose = cached;
+}
 
 export async function dbConnect() {
-  if (isConnected) return;
+  if (cached!.conn) return cached!.conn;
 
-  try {
-    const db = await mongoose.connect(MONGODB_URI);
-    isConnected = !!db.connections[0].readyState;
-    console.log("✅ MongoDB connected");
-  } catch (err) {
-    console.error("❌ MongoDB connection error:", err);
+  if (!cached!.promise) {
+    cached!.promise = mongoose.connect(MONGODB_URI);
   }
+
+  cached!.conn = await cached!.promise;
+  return cached!.conn;
 }

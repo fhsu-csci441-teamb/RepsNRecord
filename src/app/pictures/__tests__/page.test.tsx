@@ -191,7 +191,7 @@ describe('Photo Upload Functionality', () => {
       values: jest.fn(),
       forEach: jest.fn(),
       [Symbol.iterator]: jest.fn(),
-    })) as any;
+    })) as unknown as typeof FormData;
 
     (global.fetch as jest.Mock)
       .mockResolvedValueOnce({
