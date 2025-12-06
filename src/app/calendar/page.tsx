@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { auth } from "@/lib/firebase";
 import "./calendar.css";
 
 export default function CalendarPage() {
@@ -12,6 +13,7 @@ export default function CalendarPage() {
   const [reps, setReps] = useState("");
   const [weight, setWeight] = useState("");
   const [notes, setNotes] = useState("");
+  const [userId, setUserId] = useState<string | null>(null);
 
   const month = currentDate.getMonth();
   const year = currentDate.getFullYear();
@@ -23,59 +25,82 @@ export default function CalendarPage() {
   const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
   const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
 
+useEffect(() => {
+  const unsubscribe = auth.onAuthStateChanged((user) => {
+    setUserId(user?.uid || null);
+  });
+  return () => unsubscribe();
+}, []);
+
+  interface Workout {
+    userId?: string;
+    date: string;
+    exerciseName?: string;
+    sets?: number;
+    reps?: number;
+    weight?: number;
+    notes?: string;
+  }
+
   // Fetch logged workouts
-  const fetchWorkouts = async () => {
+  const fetchWorkouts = useCallback(async () => {
+    if (!userId) return;
     try {
-      const res = await fetch("/api/workouts");
+      const res = await fetch(`/api/workouts?userId=${userId}`);
       if (!res.ok) throw new Error("Failed to fetch workouts");
       const data = await res.json();
-      setLoggedDays(data.map((w: any) => w.date));
+      setLoggedDays(data.map((w: Workout) => w.date));
     } catch (err) {
       console.error("Error fetching workouts:", err);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     fetchWorkouts();
-  }, []);
+  }, [fetchWorkouts]);
 
+ 
   // Save workout
-  const saveWorkout = async () => {
-    if (!selectedDate || !workoutName || !sets || !reps) {
-      alert("Please fill in required fields (date, name, sets, reps).");
+    const saveWorkout = async () => {
+    if (!userId) {
+      alert("Please log in to save workouts.");
       return;
     }
-
-    try {
-      const res = await fetch("/api/workouts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: "demo-user",
-          date: selectedDate,
-          exerciseName: workoutName,
-          sets: parseInt(sets),
-          reps: parseInt(reps),
-          weight: parseInt(weight) || 0,
-          notes,
-        }),
-      });
-
-      if (!res.ok) throw new Error("Failed to save workout");
-
-      setShowModal(false);
-      setSelectedDate("");
-      setWorkoutName("");
-      setSets("");
-      setReps("");
-      setWeight("");
-      setNotes("");
-      fetchWorkouts();
-    } catch (err) {
-      console.error("Error saving workout:", err);
-      alert("Failed to save workout");
-    }
-  };
+      if (!selectedDate || !workoutName || !sets || !reps) {
+        alert("Please fill in required fields (date, name, sets, reps).");
+        return;
+      }
+  
+      try {
+        const res = await fetch("/api/workouts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: userId,
+            date: selectedDate,
+            exerciseName: workoutName,
+            sets: parseInt(sets),
+            reps: parseInt(reps),
+            weight: parseInt(weight) || 0,
+            notes,
+          }),
+        });
+  
+        if (!res.ok) throw new Error("Failed to save workout");
+  
+        setShowModal(false);
+        setSelectedDate("");
+        setWorkoutName("");
+        setSets("");
+        setReps("");
+        setWeight("");
+        setNotes("");
+        fetchWorkouts();
+      } catch (err) {
+        console.error("Error saving workout:", err);
+        alert("Failed to save workout");
+      }
+    };
 
   // Build calendar grid
   const daysArray = [];

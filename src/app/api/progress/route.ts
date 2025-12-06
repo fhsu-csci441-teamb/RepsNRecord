@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/mongodb";
-import { LogWorkout } from "@/models/workoutlogmodel";
+import WorkoutDay from "@/models/WorkoutDay";
 
 export async function GET(req: Request) {
   try {
-    await dbConnect();
-
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("userId");
     const year = searchParams.get("year");
@@ -19,7 +17,16 @@ export async function GET(req: Request) {
 
     const currentYear = year ? parseInt(year) : new Date().getFullYear();
 
-    const workouts = await LogWorkout.find({ userId });
+    await dbConnect();
+    // Limit the query to the requested year for performance
+    const start = `${currentYear}-01-01`;
+    const end = `${currentYear + 1}-01-01`;
+    const result = await WorkoutDay.find({
+      userId,
+      date: { $gte: start, $lt: end },
+    })
+      .select("date")
+      .lean();
 
     const monthNames = [
       "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -31,9 +38,10 @@ export async function GET(req: Request) {
       monthlyCounts[month] = 0;
     });
 
-    workouts.forEach((workout) => {
-      if (!workout.date) return;
-      
+    // Postgres returned rows; with Mongo we have an array of documents
+    result.forEach((workout: { date: string }) => {
+      if (!workout?.date) return;
+
       const workoutDate = new Date(workout.date);
       
       if (isNaN(workoutDate.getTime())) {
@@ -41,8 +49,8 @@ export async function GET(req: Request) {
         return;
       }
 
-      if (workoutDate.getFullYear() === currentYear) {
-        const monthIndex = workoutDate.getMonth();
+      if (workoutDate.getUTCFullYear() === currentYear) {
+        const monthIndex = workoutDate.getUTCMonth();
         const monthName = monthNames[monthIndex];
         monthlyCounts[monthName]++;
       }

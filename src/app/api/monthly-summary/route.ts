@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { dbConnect } from "../../../../lib/mongodb";
-import WorkoutDay from "../../../../models/WorkoutDay";
+import { dbConnect } from "@/lib/mongodb";
+import WorkoutDay from "@/models/WorkoutDay";
 
 export async function GET() {
   console.log("✅ /api/monthly-summary hit");
