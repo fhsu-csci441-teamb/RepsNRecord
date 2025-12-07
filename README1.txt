@@ -19,7 +19,7 @@ COMPLETE APPLICATION FEATURES:
 - User role management (user/trainer)
 
 Team Contributions:
-- Amanda Lyons: Calendar, workout logging, progress bar chart
+- Amanda Lyons: Calendar, workout logging, progress bar chart, file tree and website skeleton
 - Simranjit Sandhu: Progress API, trainer features, preferences, connections, export
 - Honesty Beaton: Photo upload, MongoDB integration, authentication
 - Caleb Miller: Database setup, testing, deployment
