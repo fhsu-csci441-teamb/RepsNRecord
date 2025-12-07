@@ -1,4 +1,9 @@
 // backend/data_collection/collect_data.ts
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// Unit test for data collection functionality
+
 import fetch from "node-fetch";
 import fs from "fs";
 import path from "path";

@@ -1,3 +1,8 @@
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// Trainer Clients API - fetches list of trainer's connected clients
+
 import { NextResponse } from "next/server";
 import { query } from "@/lib/postgres";
 

@@ -1,3 +1,8 @@
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// Unit test for progress API route
+
 describe('GET /api/progress', () => {
   it('returns monthly counts for the requested year', async () => {
     await jest.isolateModules(async () => {

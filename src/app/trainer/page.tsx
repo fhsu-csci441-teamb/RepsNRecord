@@ -1,3 +1,8 @@
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// Trainer dashboard - client management and workout history
+
 "use client";
 
 import { useState, useEffect } from "react";

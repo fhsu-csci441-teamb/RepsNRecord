@@ -1,3 +1,8 @@
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// Unit test for trainer client-workouts API route
+
 describe('GET /api/trainer/client-workouts', () => {
   it('returns 403 if trainer lacks export permission', async () => {
     await jest.isolateModules(async () => {

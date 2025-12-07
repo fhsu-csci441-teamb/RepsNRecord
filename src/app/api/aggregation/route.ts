@@ -1,3 +1,8 @@
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// Aggregation API - aggregates workout data by daily/weekly/monthly periods
+
 import { NextResponse } from "next/server";
 import { query } from "@/lib/postgres";
 

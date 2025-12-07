@@ -1,4 +1,8 @@
-// single import at the top for NextResponse and query
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// Roles API - manages user roles (user/trainer/admin)
+
 import { NextResponse } from "next/server";
 import { query } from "@/lib/postgres";
 

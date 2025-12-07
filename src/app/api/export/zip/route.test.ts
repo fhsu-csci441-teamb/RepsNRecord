@@ -1,3 +1,8 @@
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// Unit test for ZIP export API route
+
 describe('GET /api/export/zip', () => {
   it('returns a zip buffer with workouts.csv and photos manifest (mocked)', async () => {
     await jest.isolateModules(async () => {

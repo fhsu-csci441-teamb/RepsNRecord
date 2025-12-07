@@ -1,3 +1,8 @@
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// Export ZIP API - creates ZIP archive with workout logs and photos
+
 import { NextResponse } from "next/server";
 import { query } from "@/lib/postgres";
 import { getUserIdFromRequest } from '@/lib/authHelper';

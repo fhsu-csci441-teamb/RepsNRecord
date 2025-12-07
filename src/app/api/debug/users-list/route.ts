@@ -1,3 +1,7 @@
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+
 import { NextResponse } from "next/server";
 import { query } from "@/lib/postgres";
 

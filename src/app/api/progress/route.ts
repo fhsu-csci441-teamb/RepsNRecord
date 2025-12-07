@@ -1,3 +1,8 @@
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// Progress API - fetches monthly workout counts for authenticated user
+
 import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/mongodb";
 import WorkoutDay from "@/models/WorkoutDay";

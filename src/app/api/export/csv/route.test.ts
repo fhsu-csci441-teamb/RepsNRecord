@@ -1,3 +1,8 @@
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// Unit test for CSV export API route
+
 describe('GET /api/export/csv', () => {
   it('returns CSV content with headers and rows', async () => {
     const mockWorkouts = [

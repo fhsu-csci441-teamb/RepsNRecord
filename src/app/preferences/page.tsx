@@ -1,3 +1,8 @@
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// User preferences page - profile settings and trainer connection
+
 "use client";
 
 import { useState, useEffect } from "react";

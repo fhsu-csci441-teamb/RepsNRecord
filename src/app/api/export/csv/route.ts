@@ -1,3 +1,8 @@
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// Export CSV API - exports complete workout history as CSV file
+
 import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/mongodb";
 import WorkoutDay from "@/models/WorkoutDay";

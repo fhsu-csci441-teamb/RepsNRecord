@@ -1,3 +1,8 @@
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// Integration test for CSV export functionality
+
 describe('Integration: POST /api/workouts -> GET /api/export/csv', () => {
   it('creates a workout and exports a CSV with the row', async () => {
     const created = [];
