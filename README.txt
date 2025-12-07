@@ -91,11 +91,11 @@ RepsNRecord/
 |       |     |     +---> trainer/       // Trainer page (Simranjit)
 |       |     |     +---> calendar/      (Team)
 |       |     |     +---> log/           (Team)
-|       |     |     +---> pictures/      (Team)
+|       |     |     +---> pictures/      (Amanda Lyons)
 |       |     |
-|       |     +---> components/         // Reusable React components
-|       |     +---> lib/                // Helper libraries
-|       |     +---> models/             // Data models and types
+|       |     +---> components/         // Reusable React components (Amanda Lyons)
+|       |     +---> lib/                // Helper libraries (Amanda Lyons)
+|       |     +---> models/             // Data models and types (Amanda Lyons)
 |       |
 |       +---> backend/                  // Backend server and scripts
 |       |     |
@@ -106,9 +106,9 @@ RepsNRecord/
 |       |
 |       +---> public/                   // Static assets
 |       |     |
-|       |     +---> images/             // Images and icons
+|       |     +---> images/             // Images and icons (Amanda Lyons)
 |       |
-|       +---> __mocks__/                // Mock files for testing
+|       +---> __mocks__/                // Mock files for testing (Amanda Lyons)
 |
 +-----> tests/            // Unit and integration tests
 |       |
@@ -192,7 +192,7 @@ src/app/pictures/page.tsx (Photo Gallery)
   - MongoDB integration for photo storage
   - Image compression and thumbnail generation
   - Written by: Amanda Lyons
-  - Tested by: Team
+  - Tested by: Simranjit Sandhu
 
 src/app/progress/page.tsx (Progress Tracking)
   - Progress tracking page showing monthly workout counts
@@ -211,29 +211,33 @@ src/app/trainer/page.tsx
   - Trainer dashboard for managing clients
   - Client list, workout history, export functionality
   - Written by: Simranjit Sandhu
-  - Tested by: Simranjit Sandhu
-  - Debugged by: Simranjit Sandhu
+  - Tested by: Amanda Lyons
+  - Debugged by: Amanda Lyons
 
 src/app/api/trainer/client-workouts/route.ts
   - API endpoint for trainer to access client workout data
   - Implements permission checking
   - Written by: Simranjit Sandhu
+  - Tested by: Amanda Lyons
+  - Debugged by: Amanda Lyons
 
 src/app/api/trainer/clients/route.ts
   - API endpoint for trainer to get list of their clients
   - Written by: Simranjit Sandhu
+  - Tested by: Amanda Lyons
+  - Debugged by: Amanda Lyons
 
 src/app/preferences/page.tsx (User Preferences)
   - User preferences page for profile settings
   - Trainer connection functionality
   - Written by: Simranjit Sandhu
-  - Tested by: Simranjit Sandhu
-  - Debugged by: Simranjit Sandhu
+  - Tested by: Amanda Lyons
+  - Debugged by: Amanda Lyons
 
 src/app/login/page.tsx (Authentication)
   - User login and signup (Amanda Lyons)
   - User ID vs Trainer ID login logic (Simranjit Sandhu)
-  - Firebase authentication integration (Team)
+  - Firebase authentication integration (Amanda Lyons)
   - Written by: Amanda Lyons, Simranjit Sandhu
   - Tested by: Team
 
@@ -328,9 +332,9 @@ backend/migrations/ - Database schema migrations
 
 MODELS:
 -------
-src/models/WorkoutDay.ts - Workout data structure
+src/models/WorkoutDay.ts - Workout data structure (Amanda Lyons)
 src/models/WorkoutProgress.ts - Progress tracking model (Simranjit)
-src/models/workoutlogmodel.ts - Workout log model
+src/models/workoutlogmodel.ts - Workout log model 
 
 TEST FILES:
 -----------
