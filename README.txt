@@ -10,13 +10,16 @@ This document provides comprehensive documentation for the entire RepsNRecord ap
 including all features, APIs, pages, and components developed by the team.
 
 COMPLETE APPLICATION FEATURES:
+- Complete UI and UX Skeleton (Amanda Lyons)
+- Firebase authentication system (Amanda Lyons)
+- Base file tree and github repository (Amanda Lyons)
 - Workout Logging (Honesty Beaton) and Calendar (Caleb Miller)
 - Progress Tracking with Bar Charts (Amanda Lyons) and Calendar Integration (Simranjit Sandhu)
 - Photo Gallery and Upload System (Amanda Lyons)
 - Trainer Dashboard and Client Management (Simranjit Sandhu)
 - User Preferences and Trainer Connections (Simranjit Sandhu)
-- Authentication and User Management (Honesty Beaton)
-- Database Infrastructure (Caleb Miller)
+- Authentication and User Management (Amanda Lyons/Honesty Beaton)
+- Database Infrastructure (Honesty Beaton/Caleb Miller)
 - Export Functionality - CSV/ZIP (Simranjit Sandhu)
 - API Endpoints for all features (Team collaboration)
 
