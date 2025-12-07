@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { auth } from "@/lib/firebase";
 import "./calendar.css";
+import { getRandomMotivationalMessage } from "@/lib/motivationalMessages";
 
 export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -14,6 +15,8 @@ export default function CalendarPage() {
   const [weight, setWeight] = useState("");
   const [notes, setNotes] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
+  const [motivationalMessage, setMotivationalMessage] = useState("");
+  const [showMotivation, setShowMotivation] = useState(false);
 
   const month = currentDate.getMonth();
   const year = currentDate.getFullYear();
@@ -59,48 +62,58 @@ useEffect(() => {
     fetchWorkouts();
   }, [fetchWorkouts]);
 
- 
+
   // Save workout
-    const saveWorkout = async () => {
+  const saveWorkout = async () => {
     if (!userId) {
       alert("Please log in to save workouts.");
       return;
     }
-      if (!selectedDate || !workoutName || !sets || !reps) {
-        alert("Please fill in required fields (date, name, sets, reps).");
-        return;
-      }
-  
-      try {
-        const res = await fetch("/api/workouts", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: userId,
-            date: selectedDate,
-            exerciseName: workoutName,
-            sets: parseInt(sets),
-            reps: parseInt(reps),
-            weight: parseInt(weight) || 0,
-            notes,
-          }),
-        });
-  
-        if (!res.ok) throw new Error("Failed to save workout");
-  
-        setShowModal(false);
-        setSelectedDate("");
-        setWorkoutName("");
-        setSets("");
-        setReps("");
-        setWeight("");
-        setNotes("");
-        fetchWorkouts();
-      } catch (err) {
-        console.error("Error saving workout:", err);
-        alert("Failed to save workout");
-      }
-    };
+    if (!selectedDate || !workoutName || !sets || !reps) {
+      alert("Please fill in required fields (date, name, sets, reps).");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/workouts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: userId,
+          date: selectedDate,
+          exerciseName: workoutName,
+          sets: parseInt(sets),
+          reps: parseInt(reps),
+          weight: parseInt(weight) || 0,
+          notes,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to save workout");
+
+      // Show motivational message
+      const message = getRandomMotivationalMessage();
+      setMotivationalMessage(message);
+      setShowMotivation(true);
+
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        setShowMotivation(false);
+      }, 5000);
+
+      setShowModal(false);
+      setSelectedDate("");
+      setWorkoutName("");
+      setSets("");
+      setReps("");
+      setWeight("");
+      setNotes("");
+      fetchWorkouts();
+    } catch (err) {
+      console.error("Error saving workout:", err);
+      alert("Failed to save workout");
+    }
+  };
 
   // Build calendar grid
   const daysArray = [];
@@ -316,6 +329,19 @@ useEffect(() => {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Motivational Message Toast */}
+      {showMotivation && (
+        <div
+          className="fixed top-8 left-1/2 transform -translate-x-1/2 z-50
+                     bg-gradient-to-r from-green-500 to-emerald-600
+                     text-white px-8 py-4 rounded-2xl shadow-2xl
+                     animate-bounce-in max-w-md text-center font-bold text-lg"
+          onClick={() => setShowMotivation(false)}
+        >
+          {motivationalMessage}
         </div>
       )}
     </div>
