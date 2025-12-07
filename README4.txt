@@ -5,6 +5,10 @@ Project: RepsNRecord
 Authors: Amanda Lyons, Simranjit Sandhu, Honesty Beaton, Caleb Miller
 Date: October 2025 - December 2025
 
+APPLICATION STRUCTURE:
+Amanda Lyons created the initial Next.js application skeleton with navigation 
+and all page structures. Team members then added functionality and tests.
+
 This guide covers ALL unit tests for the entire RepsNRecord application.
 
 ===========================================
