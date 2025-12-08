@@ -27,7 +27,7 @@ yarn-error.log*
 *.cache
 
 # Claude Code Generated files
-CLAUD.md
+CLAUDE.md
 
 # Test coverage
 coverage/
@@ -35,3 +35,7 @@ coverage/
 # Uploaded files
 public/uploads/
 backend/public/uploads/
+
+# Vercel / Cloudflare build outputs
+.vercel/
+nul

@@ -1,12 +1,16 @@
 "use client";
 
+<<<<<<< HEAD
+import { useEffect, Suspense } from "react";
+=======
 import { useEffect, useState } from "react";
+>>>>>>> 160749f486a45a4fa795d783a0b7f1a1efd83090
 import { useRouter, useSearchParams } from "next/navigation";
 import { signInWithPopup, signOut } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
 import { useAuth } from "@/lib/useAuth";
 
-export default function LoginPage() {
+function LoginContent() {
   const { user, loading } = useAuth();
   const [selectedRole, setSelectedRole] = useState<string>("user");
   const [forceAccountSwitch, setForceAccountSwitch] = useState(false);
@@ -154,5 +158,19 @@ export default function LoginPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen grid place-items-center bg-gradient-to-r from-pink-500 to-amber-300">
+        <div className="bg-white/85 p-8 rounded-2xl shadow-xl text-center space-y-6">
+          <h1 className="text-3xl font-black">REPS N RECORD</h1>
+        </div>
+      </main>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }

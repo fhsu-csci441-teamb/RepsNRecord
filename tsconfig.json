@@ -25,4 +25,9 @@
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
+<<<<<<< HEAD
 }
+
+=======
+}
+>>>>>>> 160749f486a45a4fa795d783a0b7f1a1efd83090

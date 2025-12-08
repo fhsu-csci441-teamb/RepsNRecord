@@ -1,19 +1,21 @@
 "use client";
 import AuthGuard from "@/components/AuthGuard";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/lib/useAuth";
+import { storage } from "@/lib/firebase";
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 type Photo = {
-  id: string;
-  file_url: string;
-  thumb_url: string;
+  _id: string;
+  fileUrl: string;
+  thumbUrl: string;
   description?: string;
-  taken_at?: string;
-  created_at: string;
+  takenAt?: string;
+  createdAt: string;
 };
 
-const BACKEND_URL = "http://localhost:3000";
-
 export default function PicturesPage() {
+  const { user } = useAuth();
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [month, setMonth] = useState(new Date().toISOString().slice(0, 7)); // YYYY-MM
   const [uploading, setUploading] = useState(false);
@@ -21,12 +23,16 @@ export default function PicturesPage() {
 
   // Fetch photos on mount and when month changes
   useEffect(() => {
-    fetchPhotos();
-  }, [month]);
+    if (user) {
+      fetchPhotos();
+    }
+  }, [month, user]);
 
   const fetchPhotos = async () => {
+    if (!user) return;
+
     try {
-      const res = await fetch(`${BACKEND_URL}/api/photos?month=${month}`);
+      const res = await fetch(`/api/photos?month=${month}&userId=${user.uid}`);
       if (!res.ok) throw new Error(`Failed to fetch: ${res.statusText}`);
       const data = await res.json();
       setPhotos(data);
@@ -39,23 +45,49 @@ export default function PicturesPage() {
 
   const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file || !user) return;
 
     setUploading(true);
     setError(null);
 
     try {
-      const formData = new FormData();
-      formData.append("photo", file);
+      // Create unique filename
+      const timestamp = Date.now();
+      const fileName = `${timestamp}_${file.name}`;
+      const userId = user.uid;
+
+      // Upload full image to Firebase Storage
+      const fileRef = ref(storage, `photos/${userId}/${fileName}`);
+      await uploadBytes(fileRef, file);
+      const fileUrl = await getDownloadURL(fileRef);
+
+      // Create thumbnail using canvas (client-side resize)
+      const thumbBlob = await createThumbnail(file, 512, 512);
+      const thumbRef = ref(storage, `photos/${userId}/thumbs/${fileName}`);
+      await uploadBytes(thumbRef, thumbBlob);
+      const thumbUrl = await getDownloadURL(thumbRef);
+
+      // Get image dimensions
+      const dimensions = await getImageDimensions(file);
 
       // Use the selected month as the taken_at date (set to first day of month at noon UTC)
       const takenAtDate = new Date(`${month}-15T12:00:00Z`);
-      formData.append("takenAt", takenAtDate.toISOString());
-      formData.append("description", "Progress photo");
 
-      const res = await fetch(`${BACKEND_URL}/api/photos`, {
+      // Save metadata to MongoDB
+      const res = await fetch("/api/photos", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          fileUrl,
+          thumbUrl,
+          mimeType: file.type,
+          bytes: file.size,
+          width: dimensions.width,
+          height: dimensions.height,
+          takenAt: takenAtDate.toISOString(),
+          description: "Progress photo",
+        }),
       });
 
       if (!res.ok) {
@@ -74,9 +106,12 @@ export default function PicturesPage() {
     }
   };
 
-  const remove = async (id: string) => {
+  const remove = async (photo: Photo) => {
+    if (!user) return;
+
     try {
-      const res = await fetch(`${BACKEND_URL}/api/photos/${id}`, {
+      // Delete from MongoDB
+      const res = await fetch(`/api/photos?id=${photo._id}&userId=${user.uid}`, {
         method: "DELETE",
       });
 
@@ -85,8 +120,19 @@ export default function PicturesPage() {
         throw new Error(errData.error || "Delete failed");
       }
 
-      // Remove from local state only after successful deletion
-      setPhotos((p) => p.filter((x) => x.id !== id));
+      // Delete from Firebase Storage
+      try {
+        const fileRef = ref(storage, photo.fileUrl);
+        const thumbRef = ref(storage, photo.thumbUrl);
+        await deleteObject(fileRef);
+        await deleteObject(thumbRef);
+      } catch (storageErr) {
+        console.warn("Firebase Storage deletion error:", storageErr);
+        // Continue even if storage deletion fails
+      }
+
+      // Remove from local state
+      setPhotos((p) => p.filter((x) => x._id !== photo._id));
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Delete failed");
@@ -95,8 +141,8 @@ export default function PicturesPage() {
   };
 
   const visible = photos.filter((p) => {
-    if (!p.taken_at) return true;
-    const photoMonth = p.taken_at.slice(0, 7);
+    if (!p.takenAt) return true;
+    const photoMonth = p.takenAt.slice(0, 7);
     return photoMonth === month;
   });
 
@@ -140,7 +186,7 @@ export default function PicturesPage() {
 
           {uploading && (
             <div className="rounded-2xl border border-blue-200 bg-blue-50 p-4 text-blue-700">
-              Uploading photo...
+              Uploading photo to Firebase Storage...
             </div>
           )}
 
@@ -156,14 +202,14 @@ export default function PicturesPage() {
                 </div>
               )}
               {visible.map((p) => (
-                <div key={p.id} className="relative group rounded-2xl overflow-hidden border bg-white shadow-sm">
+                <div key={p._id} className="relative group rounded-2xl overflow-hidden border bg-white shadow-sm">
                   <img
-                    src={`${BACKEND_URL}${p.thumb_url}`}
+                    src={p.thumbUrl}
                     alt={p.description || "Progress"}
                     className="w-full h-48 object-cover"
                   />
                   <button
-                    onClick={() => remove(p.id)}
+                    onClick={() => remove(p)}
                     className="absolute top-2 right-2 bg-white/90 text-pink-600 px-2 py-1 rounded-lg text-xs opacity-0 group-hover:opacity-100 transition"
                   >
                     Delete
@@ -176,4 +222,60 @@ export default function PicturesPage() {
       </main>
     </AuthGuard>
   );
+}
+
+// Helper: Create thumbnail blob from image file
+async function createThumbnail(file: File, maxWidth: number, maxHeight: number): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    img.onload = () => {
+      let width = img.width;
+      let height = img.height;
+
+      // Calculate aspect ratio
+      if (width > height) {
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
+      } else {
+        if (height > maxHeight) {
+          width = (width * maxHeight) / height;
+          height = maxHeight;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      ctx?.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(
+        (blob) => {
+          if (blob) resolve(blob);
+          else reject(new Error("Failed to create thumbnail"));
+        },
+        "image/jpeg",
+        0.8
+      );
+    };
+
+    img.onerror = reject;
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+// Helper: Get image dimensions
+async function getImageDimensions(file: File): Promise<{ width: number; height: number }> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      resolve({ width: img.width, height: img.height });
+      URL.revokeObjectURL(img.src);
+    };
+    img.onerror = reject;
+    img.src = URL.createObjectURL(file);
+  });
 }

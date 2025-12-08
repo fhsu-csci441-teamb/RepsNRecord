@@ -9,10 +9,19 @@ Date: October 2025 - December 2025
 This document provides comprehensive documentation for the entire RepsNRecord application,
 including all features, APIs, pages, and components developed by the team.
 
-COMPLETE APPLICATION FEATURES:
-- Complete UI and UX Skeleton (Amanda Lyons)
-- Firebase authentication system (Amanda Lyons)
-- Base file tree and github repository (Amanda Lyons)
+INITIAL APPLICATION SKELETON:
+Amanda Lyons created the initial Next.js application structure with:
+- Navigation bar (Navbar component)
+- Login page skeleton
+- Calendar page skeleton
+- Workout log page skeleton
+- Progress page skeleton
+- Pictures page skeleton
+- Basic routing and page structure
+- Firebase authentication system
+- Base file tree and github repository
+
+COMPLETE APPLICATION FEATURES (Built on Amanda's skeleton):
 - Workout Logging (Honesty Beaton) and Calendar (Caleb Miller)
 - Progress Tracking with Bar Charts (Amanda Lyons) and Calendar Integration (Simranjit Sandhu)
 - Photo Gallery and Upload System (Amanda Lyons)
@@ -43,6 +52,17 @@ TABLE OF CONTENTS
 RepsNRecord is a fitness tracking web application built with Next.js, Node.js, 
 PostgreSQL, MongoDB, and Firebase. Users can log workouts, track progress, 
 upload photos, and trainers can manage their clients.
+
+APPLICATION STRUCTURE:
+Amanda Lyons created the initial Next.js application skeleton with navigation 
+bar and all main page structures (login, calendar, log, progress, pictures). 
+Team members then built out functionality within each page:
+- Calendar functionality: Caleb Miller
+- Workout logging functionality: Honesty Beaton
+- Progress features: Amanda Lyons (bar chart), Simranjit Sandhu (calendar integration)
+- Pictures functionality: Amanda Lyons
+- Trainer features: Simranjit Sandhu
+- Authentication: Honesty Beaton
 
 Technology Stack:
 - Frontend: Next.js 15 (React), TypeScript, Tailwind CSS
@@ -123,8 +143,8 @@ RepsNRecord/
 |       +---> src/app/api/
 |       |     +---> progress/route.test.ts        (Simranjit)
 |       |     +---> trainer/*/route.test.ts       (Simranjit)
-|       |     +---> export/csv/route.test.ts      (Team)
-|       |     +---> export/zip/route.test.ts      (Team)
+|       |     +---> export/csv/route.test.ts      (Simranjit)
+|       |     +---> export/zip/route.test.ts      (Simranjit)
 |       |
 |       +---> src/app/
 |       |     +---> preferences/page.test.tsx     (Simranjit)
@@ -346,9 +366,9 @@ MY TEST FILES (Simranjit Sandhu):
 - src/app/api/trainer/client-workouts/route.test.ts
 - src/app/preferences/page.test.tsx
 - src/app/trainer/page.test.tsx
-- src/app/api/export/csv/route.test.ts (added headers)
-- src/app/api/export/csv/integration.test.ts (added headers)
-- src/app/api/export/zip/route.test.ts (added headers)
+- src/app/api/export/csv/route.test.ts
+- src/app/api/export/csv/integration.test.ts
+- src/app/api/export/zip/route.test.ts
 
 TEAM TEST FILES:
 - backend/tests/datacollection.test.ts
@@ -767,6 +787,9 @@ Tests:
   - src/app/api/trainer/client-workouts/route.test.ts
   - src/app/preferences/page.test.tsx
   - src/app/trainer/page.test.tsx
+  - src/app/api/export/csv/route.test.ts
+  - src/app/api/export/csv/integration.test.ts
+  - src/app/api/export/zip/route.test.ts
 
 TECHNOLOGIES USED IN MY WORK:
 ------------------------------

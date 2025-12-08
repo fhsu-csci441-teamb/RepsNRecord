@@ -6,11 +6,15 @@ Project: RepsNRecord
 Authors: Amanda Lyons, Simranjit Sandhu, Honesty Beaton, Caleb Miller
 Date: October 2025 - December 2025
 
+INITIAL APPLICATION SKELETON:
+Amanda Lyons created the initial Next.js application structure with navigation 
+bar and all main page skeletons. Team members then added functionality.
+
 Amanda Lyon's Test Contributions: 
--  Progress API tests (route.test.ts)
+- Progress API tests (route.test.ts)
 - Trainer client-workouts tests (route.test.ts)
-- Export APU Tests (CSV/ZIP)
-- Uniy tests for ZIP Export
+- Export API Tests (CSV/ZIP)
+- Unity tests for ZIP Export
 - Added headers to user search tests
 
 Simranjit Sandhu's Test Contributions:

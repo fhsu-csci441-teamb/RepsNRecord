@@ -345,6 +345,12 @@ export default function ProgressPage() {
               <div className="h-80" aria-label={`Monthly workout chart for ${year}`}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={data}>
+                    <defs>
+                      <linearGradient id="barFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#ec4899" />
+                        <stop offset="100%" stopColor="#f59e0b" />
+                      </linearGradient>
+                    </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis
                       dataKey="month"
@@ -372,12 +378,6 @@ export default function ProgressPage() {
                     >
                       <LabelList dataKey="count" position="top" fill="#666" />
                     </Bar>
-                    <defs>
-                      <linearGradient id="barFill" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="#ec4899" />
-                        <stop offset="100%" stopColor="#f59e0b" />
-                      </linearGradient>
-                    </defs>
                   </BarChart>
                 </ResponsiveContainer>
               </div>

@@ -6,6 +6,18 @@ Project: RepsNRecord Fitness Tracker
 Authors: Amanda Lyons, Simranjit Sandhu, Honesty Beaton, Caleb Miller
 Date: October 2025 - December 2025
 
+INITIAL APPLICATION SKELETON:
+Amanda Lyons created the initial Next.js application structure with:
+- Navigation bar (Navbar component)
+- Login page skeleton
+- Calendar page skeleton
+- Workout log page skeleton  
+- Progress page skeleton
+- Pictures page skeleton
+- Basic routing and page structure
+
+Team members then built out functionality within each page individually.
+
 COMPLETE APPLICATION FEATURES:
 - User authentication and account management (Firebase)
 - Daily workout logging with exercises, sets, reps, and weight
@@ -67,57 +79,82 @@ RepsNRecord/
 |
 +-----> README.txt              // Main comprehensive documentation
 +-----> README1.txt             // THIS FILE - How to run the code
-+-----> README2.txt             // Original unit testing guide
++-----> README2.txt             // Comprehensive testing guide
 +-----> README3.txt             // Integration tests guide
 +-----> README4.txt             // Unit tests guide
++-----> CHANGES_DOCUMENTATION.md // Change log documentation
 |
 +-----> package.json            // npm dependencies and scripts
++-----> package-lock.json       // npm lock file
 +-----> tsconfig.json           // TypeScript configuration
 +-----> jest.config.js          // Jest testing configuration
++-----> jest.setup.js           // Jest setup file
 +-----> next.config.ts          // Next.js configuration
++-----> next-env.d.ts           // Next.js TypeScript definitions
++-----> eslint.config.mjs       // ESLint configuration
++-----> postcss.config.mjs      // PostCSS configuration
 +-----> .env.local              // Environment variables (not in Git)
++-----> .gitignore              // Git ignore rules
 |
 +-----> src/                    // Main application source code
 |       |
 |       +---> app/              // Next.js App Router
 |       |     |
-|       |     +---> layout.tsx          // Root layout
-|       |     +---> page.tsx            // Home page
+|       |     +---> layout.tsx          // Root layout (Amanda - skeleton)
+|       |     +---> page.tsx            // Home page (Amanda - skeleton)
 |       |     +---> globals.css         // Global styles
+|       |     +---> favicon.ico         // Site icon
 |       |     |
 |       |     +---> api/                // Backend API routes
 |       |     |     |
-|       |     |     +---> workouts/route.ts       (Team - CRUD)
-|       |     |     +---> progress/route.ts       (Simranjit)
-|       |     |     +---> preferences/route.ts    (Simranjit)
+|       |     |     +---> workouts/route.ts           (Honesty Beaton)
+|       |     |     +---> progress/route.ts           (Simranjit Sandhu)
+|       |     |     +---> aggregation/route.ts        (Amanda Lyons)
+|       |     |     +---> preferences/route.ts        (Simranjit Sandhu)
+|       |     |     +---> connections/route.ts        (Simranjit Sandhu)
+|       |     |     +---> roles/route.ts              (Simranjit Sandhu)
 |       |     |     +---> trainer/
-|       |     |     |     +---> clients/route.ts           (Simranjit)
-|       |     |     |     +---> client-workouts/route.ts   (Simranjit)
-|       |     |     +---> export/                 (Team)
-|       |     |     +---> users/                  (Team)
+|       |     |     |     +---> clients/route.ts           (Simranjit Sandhu)
+|       |     |     |     +---> client-workouts/route.ts   (Simranjit Sandhu)
+|       |     |     +---> export/
+|       |     |     |     +---> csv/route.ts               (Simranjit Sandhu)
+|       |     |     |     +---> zip/route.ts               (Simranjit Sandhu)
+|       |     |     +---> debug/
+|       |     |     |     +---> check-user/route.ts        (Simranjit Sandhu)
+|       |     |     |     +---> users-list/route.ts        (Simranjit Sandhu)
+|       |     |     +---> users/
+|       |     |     |     +---> search/route.ts            (Simranjit Sandhu)
+|       |     |     +---> logs/route.ts               (Team)
+|       |     |     +---> me/route.ts                 (Team)
+|       |     |     +---> monthly-summary/route.ts    (Team)
+|       |     |     +---> personal-records/route.ts   (Team)
+|       |     |     +---> workout-progress/route.ts   (Team)
 |       |     |
-|       |     +---> calendar/page.tsx     (Team)
-|       |     +---> log/page.tsx          (Team)
-|       |     +---> login/page.tsx        (Team)
-|       |     +---> pictures/page.tsx     (Team)
-|       |     +---> progress/page.tsx     (Simranjit)
-|       |     +---> preferences/page.tsx  (Simranjit)
-|       |     +---> trainer/page.tsx      (Simranjit)
+|       |     +---> calendar/page.tsx     (Caleb Miller)
+|       |     +---> log/page.tsx          (Honesty Beaton)
+|       |     +---> login/page.tsx        (Amanda Lyons, Simranjit Sandhu)
+|       |     +---> pictures/page.tsx     (Amanda Lyons)
+|       |     +---> progress/page.tsx     (Amanda Lyons, Simranjit Sandhu)
+|       |     +---> preferences/page.tsx  (Simranjit Sandhu)
+|       |     +---> trainer/page.tsx      (Simranjit Sandhu)
+|       |     +---> records/page.tsx      (Team)
 |       |
 |       +---> components/       // Reusable React components
-|       |     +---> Navbar.tsx          (Team)
-|       |     +---> AuthGuard.tsx       (Team)
+|       |     +---> Navbar.tsx          (Amanda Lyons)
+|       |     +---> AuthGuard.tsx       (Honesty Beaton)
+|       |     +---> __tests__/          // Component tests
 |       |
 |       +---> lib/              // Helper libraries and utilities
 |       |     +---> firebase.ts         // Firebase auth config
 |       |     +---> mongodb.ts          // MongoDB connection
 |       |     +---> postgres.ts         // PostgreSQL connection
 |       |     +---> auth.ts             // Auth helpers
+|       |     +---> authHelper.ts       // Auth helper functions
 |       |     +---> useAuth.ts          // Auth React hook
 |       |
 |       +---> models/           // TypeScript data models
 |             +---> WorkoutDay.ts
-|             +---> WorkoutProgress.ts  (Simranjit)
+|             +---> WorkoutProgress.ts  (Simranjit Sandhu)
 |             +---> workoutlogmodel.ts
 |
 +-----> backend/                // Backend server and utilities
@@ -125,17 +162,66 @@ RepsNRecord/
 |       +---> server.js                 // Express server
 |       +---> db.js                     // PostgreSQL connection
 |       +---> uploads.js                // File upload handler
+|       +---> seed_mongo.js             // MongoDB seeding script
 |       +---> package.json              // Backend dependencies
+|       +---> package-lock.json         // Backend lock file
 |       |
 |       +---> migrations/               // Database migrations
 |       |     +---> 001_create_photos.sql
 |       |     +---> 002_create_user_preferences.sql
 |       |     +---> 003_create_user_roles.sql
 |       |     +---> 004_create_app_schema_and_indexes.sql
-|       |     +---> 007_create_trainer_permissions.sql (Simranjit)
+|       |     +---> 004_rollback_app_schema.sql
+|       |     +---> 005_seed_demo_users.sql
+|       |     +---> 006_seed_admin_and_demo_data.sql
+|       |     +---> 007_create_trainer_permissions.sql (Simranjit Sandhu)
+|       |     +---> 008_add_email_to_user_preferences.sql
+|       |
+|       +---> run_migrations.js         // Migration runner
+|       +---> run_migrations.sh         // Shell script for migrations
+|       +---> run_rollback.sh           // Rollback script
+|       +---> run_seed.sh               // Seeding script
+|       +---> MIGRATIONS_README.md      // Migration documentation
+|       |
+|       +---> Utility Scripts:
+|       |     +---> check_shared_exports.js
+|       |     +---> check_trainer_clients.js
+|       |     +---> check_user_progress.js
+|       |     +---> check_workout_dates.js
+|       |     +---> create_shared_exports.js
+|       |     +---> create_trainer_permissions.js
+|       |     +---> fix_duplicates.js
+|       |     +---> show_all_workouts.js
+|       |     +---> test-db.js
+|       |     +---> test-uploader.html
 |       |
 |       +---> tests/                    // Backend tests
-|             +---> datacollection.test.ts
+|             +---> datacollection.test.ts      (Team)
+|             +---> integrationtests.test.ts    (Team)
+|             +---> uploads.test.js             (Amanda Lyons)
+|
++-----> public/                 // Static assets
+|       +---> images/                   // Images and icons
+|       +---> (static files served directly)
+|
++-----> coverage/               // Test coverage reports (generated)
+|       +---> lcov-report/
+|       +---> clover.xml
+|       +---> coverage-final.json
+|       +---> lcov.info
+|
++-----> __mocks__/              // Mock files for testing
+|       +---> next/
+|             +---> server.js           // Next.js server mocks
+|
++-----> .next/                  // Next.js build output (generated, not in Git)
++-----> node_modules/           // npm packages (not in Git)
++-----> backend/node_modules/   // Backend npm packages (not in Git)
+|
++-----> Additional Files:
+        +---> fix_trainer_clients_duplicates.sql
+        +---> build.log
+        +---> dev.log
 |             +---> integrationtests.test.ts
 |             +---> uploads.test.js
 |

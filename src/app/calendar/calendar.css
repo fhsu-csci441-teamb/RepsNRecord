@@ -1,3 +1,8 @@
+// written  by: Caleb Millender
+// designed by: Caleb Millender
+// debugged by: Caleb Millender
+
+
 /* ================================
    🌟 CALENDAR PAGE STYLING (FIXED)
 ================================ */
@@ -321,30 +326,6 @@
 }
 
 /* ================================
-   💪 MOTIVATIONAL MESSAGE TOAST
-================================ */
-@keyframes bounce-in {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -100px) scale(0.8);
-  }
-  60% {
-    opacity: 1;
-    transform: translate(-50%, 10px) scale(1.05);
-  }
-  80% {
-    transform: translate(-50%, -5px) scale(0.98);
-  }
-  100% {
-    transform: translate(-50%, 0) scale(1);
-  }
-}
-
-.animate-bounce-in {
-  animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-/* ================================
    📱 RESPONSIVE DESIGN
 ================================ */
 @media (max-width: 768px) {
@@ -370,4 +351,27 @@
   .form-group.third {
     flex: 1 1 100%;
   }
+}
+/* ================================
+   🔥 NEW — Streak Summary Box
+================================ */
+.streak-summary {
+  width: 90%;
+  max-width: 800px;
+  background: #ff8c42;
+  color: white;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(255, 140, 66, 0.35);
+}
+
+/* ================================
+   🔥 NEW — Highlight streak days
+================================ */
+.streak-highlight {
+  border: 3px solid #facc15 !important;
+  box-shadow: 0 0 12px #facc15;
 }

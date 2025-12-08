@@ -1,8 +1,23 @@
+// written by: Caleb Millender
+// designed by: Caleb Millender
+// debugged by: Caleb Millender
+
+
 "use client";
 import React, { useState, useEffect } from "react";
 
+interface Workout {
+  _id: string;
+  date: string;
+  exerciseName?: string;
+  sets: number;
+  reps: number;
+  weight?: number;
+  notes?: string;
+}
+
 export default function LogPage() {
-  const [workouts, setWorkouts] = useState<any[]>([]);
+  const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchWorkouts = async () => {
@@ -76,11 +91,12 @@ export default function LogPage() {
                   <p className="text-gray-600">📅 {workout.date}</p>
                   <p className="text-gray-600">
                     💪 {workout.sets} sets × {workout.reps} reps
-                    {workout.weight > 0 && ` @ ${workout.weight} lbs`}
+                    {workout.weight && workout.weight > 0 && ` @ ${workout.weight} lbs`}
                   </p>
+                  <p className="text-gray-600">🔥 Intensity: {workout.intensity}/5</p>
                   {workout.notes && (
                     <p className="text-gray-500 text-sm mt-1 italic">
-                      "{workout.notes}"
+                      &ldquo;{workout.notes}&rdquo;
                     </p>
                   )}
                 </div>
@@ -94,6 +110,14 @@ export default function LogPage() {
             ))}
           </div>
         )}
+        <div>
+          <button
+            className="mt-8 w-full bg-white text-pink-500 font-bold py-3 rounded-2xl shadow-lg hover:shadow-xl transition"
+            onClick={() => window.open('/api/workouts/pdf')}
+          > 
+            Download PDF Report
+          </button>
+        </div>
       </div>
     </div>
   );

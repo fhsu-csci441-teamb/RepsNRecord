@@ -1,3 +1,8 @@
+// written by: Caleb Millender & Honesty Beaton
+// designed by: Caleb Millender & Honesty Beaton
+// debugged by: Caleb Millender & Honesty Beaton
+
+
 import mongoose, { Schema, models } from "mongoose";
 
 const WorkoutDaySchema = new Schema(
@@ -8,12 +13,12 @@ const WorkoutDaySchema = new Schema(
     sets: { type: Number, required: true },
     reps: { type: Number, required: true },
     weight: { type: Number, default: 0 },
-    // ❌ notes removed as per team decision
+    intensity: { type: Number, default: 0 },
+    notes: { type: String, default: "" },
   },
   { timestamps: true }
 );
 
-// ✅ Always export a model (never just a schema)
 const WorkoutDay =
   models.WorkoutDay || mongoose.model("WorkoutDay", WorkoutDaySchema);
 

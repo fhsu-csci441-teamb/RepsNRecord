@@ -1,6 +1,15 @@
+// written by: Caleb Millender & Honesty Beaton
+// designed by: Caleb Millender & Honesty Beaton
+// debugged by: Caleb Millender & Honesty Beaton
+
 import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/mongodb";
+<<<<<<< HEAD
+import { LogWorkout } from "@/models/workoutlogmodel";
+
+=======
 import WorkoutDay from "@/models/WorkoutDay";
+>>>>>>> 160749f486a45a4fa795d783a0b7f1a1efd83090
 
 export async function GET() {
   console.log("✅ /api/monthly-summary hit");
@@ -11,7 +20,7 @@ export async function GET() {
     const userId = "demo-user";
 
     // Fetch all workouts
-    const workouts = await WorkoutDay.find({ userId });
+    const workouts = await LogWorkout.find({ userId });
 
     if (!workouts || workouts.length === 0) {
       console.log("No workouts found.");
@@ -19,7 +28,14 @@ export async function GET() {
     }
 
     // Group workouts by month (e.g. "2025-10")
-    const summary = workouts.reduce((acc: any, workout: any) => {
+    interface MonthlySummary {
+      month: string;
+      totalWorkouts: number;
+      totalSets: number;
+      totalReps: number;
+      totalWeight: number;
+    }
+    const summary = workouts.reduce((acc: Record<string, MonthlySummary>, workout: { date: string; sets?: number; reps?: number; weight?: number }) => {
       const month = workout.date.slice(0, 7); // "YYYY-MM"
       if (!acc[month]) {
         acc[month] = {
@@ -40,10 +56,10 @@ export async function GET() {
     }, {});
 
     // Convert grouped object into an array
-    const summaryArray = Object.values(summary);
+    const summaryArray = Object.values(summary) as MonthlySummary[];
 
     // Compute average weight per workout
-    const result = summaryArray.map((m: any) => ({
+    const result = summaryArray.map((m) => ({
       month: m.month,
       totalWorkouts: m.totalWorkouts,
       totalSets: m.totalSets,
