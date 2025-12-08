@@ -31,8 +31,8 @@ PROGRESS TRACKING INTEGRATION:
 
 PHOTO GALLERY INTEGRATION:
 - Photo upload and storage workflow (Amanda Lyons)
-- MongoDB photo metadata integration (Team)
-- Image compression and thumbnails (Team)
+- MongoDB photo metadata integration (Amanda Lyons)
+- Image compression and thumbnails (Amanda Lyons)
 - Photo retrieval and display (Amanda Lyons)
 
 TRAINER FEATURES INTEGRATION:
@@ -42,16 +42,16 @@ TRAINER FEATURES INTEGRATION:
 - Trainer-client connections (Simranjit Sandhu)
 
 AUTHENTICATION INTEGRATION:
-- Firebase authentication workflow (Team)
-- User session management (Team)
-- Protected route access (Team)
+- Firebase authentication workflow (Amanda Lyons)
+- User session management (Amanda Lyons)
+- Protected route access (Amanda Lyons)
 - Login and signup page (Amanda Lyons)
 - User ID vs Trainer ID login logic (Simranjit Sandhu)
 
 EXPORT FUNCTIONALITY INTEGRATION:
 - CSV export of workout history (Simranjit Sandhu)
 - ZIP export with workouts and photos (Simranjit Sandhu)
-- Data persistence across databases (Team)
+- Data persistence across databases (Honesty Beaton)
 
 USER MANAGEMENT INTEGRATION:
 - User preferences and settings (Simranjit Sandhu)

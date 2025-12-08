@@ -6,6 +6,13 @@ Project: RepsNRecord
 Authors: Amanda Lyons, Simranjit Sandhu, Honesty Beaton, Caleb Miller
 Date: October 2025 - December 2025
 
+Amanda Lyon's Test Contributions: 
+-  Progress API tests (route.test.ts)
+- Trainer client-workouts tests (route.test.ts)
+- Export APU Tests (CSV/ZIP)
+- Uniy tests for ZIP Export
+- Added headers to user search tests
+
 Simranjit Sandhu's Test Contributions:
 - Progress API tests (route.test.ts)
 - Trainer client-workouts tests (route.test.ts)

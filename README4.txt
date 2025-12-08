@@ -31,7 +31,7 @@ PROGRESS TRACKING (Amanda Lyons, Simranjit Sandhu):
 - Aggregation calculations (Simranjit Sandhu)
 
 PHOTO GALLERY (Amanda Lyons):
-- Photo upload validation
+- Photo upload validation 
 - Image compression functionality
 - Thumbnail generation
 - MongoDB metadata storage
@@ -45,12 +45,12 @@ TRAINER FEATURES (Simranjit Sandhu):
 - Client workout access control
 - Trainer-client connections
 
-AUTHENTICATION (Amanda Lyons, Simranjit Sandhu, Team):
+AUTHENTICATION (Amanda Lyons, Simranjit Sandhu):
 - Login form and page (Amanda Lyons)
 - User ID vs Trainer ID logic (Simranjit Sandhu)
 - Signup functionality (Amanda Lyons)
-- Firebase integration (Team)
-- Session management (Team)
+- Firebase integration (Amanda Lyons)
+- Session management (Amanda Lyons)
 - AuthGuard protection (Honesty Beaton)
 
 EXPORT FUNCTIONALITY (Simranjit Sandhu):
@@ -58,17 +58,17 @@ EXPORT FUNCTIONALITY (Simranjit Sandhu):
 - ZIP file creation with photos
 - Data formatting for export
 
-USER MANAGEMENT (Team):
+USER MANAGEMENT (Simranjit Sandhu):
 - User search functionality
 - Preferences form handling (Simranjit Sandhu)
 - Role assignment (Simranjit Sandhu)
 - User profile updates
 
-COMPONENTS (Team):
+COMPONENTS (Amanda Lyons, Honesty Beaton):
 - Navbar navigation (Amanda Lyons)
 - AuthGuard protection (Honesty Beaton)
-- Form components
-- UI elements
+- Form components (Amanda Lyons)
+- UI elements (Amanda Lyons)
 
 The data collection test simulates user workout activity by creating a 
 workout, fetching all workouts, and saving to a local JSON file.
