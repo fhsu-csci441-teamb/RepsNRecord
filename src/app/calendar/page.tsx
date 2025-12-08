@@ -1,7 +1,17 @@
+// written by: Caleb Millender
+// designed by: Caleb Millender
+// debugged by: Caleb Millender
+
+
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { auth } from "@/lib/firebase";
 import "./calendar.css";
+<<<<<<< HEAD
 import toast, { Toaster } from "react-hot-toast";
+=======
+import { getRandomMotivationalMessage } from "@/lib/motivationalMessages";
+>>>>>>> 160749f486a45a4fa795d783a0b7f1a1efd83090
 
 export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -14,6 +24,9 @@ export default function CalendarPage() {
   const [weight, setWeight] = useState("");
   const [intensity, setIntensity] = useState("");
   const [notes, setNotes] = useState("");
+  const [userId, setUserId] = useState<string | null>(null);
+  const [motivationalMessage, setMotivationalMessage] = useState("");
+  const [showMotivation, setShowMotivation] = useState(false);
 
   // 🔥 NEW — streak state
   const [currentStreak, setCurrentStreak] = useState(0);
@@ -30,6 +43,7 @@ export default function CalendarPage() {
   const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
   const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
 
+<<<<<<< HEAD
   // Fetch logged workouts (with userId header)
   const fetchWorkouts = async () => {
     try {
@@ -39,10 +53,37 @@ export default function CalendarPage() {
       if (!res.ok) throw new Error("Failed to fetch workouts");
       const data = await res.json();
       setLoggedDays(data.map((w: { date: string }) => w.date));
+=======
+useEffect(() => {
+  const unsubscribe = auth.onAuthStateChanged((user) => {
+    setUserId(user?.uid || null);
+  });
+  return () => unsubscribe();
+}, []);
+
+  interface Workout {
+    userId?: string;
+    date: string;
+    exerciseName?: string;
+    sets?: number;
+    reps?: number;
+    weight?: number;
+    notes?: string;
+  }
+
+  // Fetch logged workouts
+  const fetchWorkouts = useCallback(async () => {
+    if (!userId) return;
+    try {
+      const res = await fetch(`/api/workouts?userId=${userId}`);
+      if (!res.ok) throw new Error("Failed to fetch workouts");
+      const data = await res.json();
+      setLoggedDays(data.map((w: Workout) => w.date));
+>>>>>>> 160749f486a45a4fa795d783a0b7f1a1efd83090
     } catch (err) {
       console.error("Error fetching workouts:", err);
     }
-  };
+  }, [userId]);
 
   // Fetch streak data (with userId header)
   const fetchStreak = async () => {
@@ -66,8 +107,13 @@ export default function CalendarPage() {
 
   useEffect(() => {
     fetchWorkouts();
+<<<<<<< HEAD
     fetchStreak();
   }, []);
+=======
+  }, [fetchWorkouts]);
+
+>>>>>>> 160749f486a45a4fa795d783a0b7f1a1efd83090
 
   // Achievement popups
   useEffect(() => {
@@ -78,6 +124,10 @@ export default function CalendarPage() {
 
   // Save workout
   const saveWorkout = async () => {
+    if (!userId) {
+      alert("Please log in to save workouts.");
+      return;
+    }
     if (!selectedDate || !workoutName || !sets || !reps) {
       alert("Required fields missing.");
       return;
@@ -88,7 +138,7 @@ export default function CalendarPage() {
         method: "POST",
         headers: { "Content-Type": "application/json", "userId": "demo-user" },
         body: JSON.stringify({
-          userId: "demo-user",
+          userId: userId,
           date: selectedDate,
           exerciseName: workoutName,
           sets: parseInt(sets),
@@ -100,6 +150,16 @@ export default function CalendarPage() {
       });
 
       if (!res.ok) throw new Error("Failed to save workout");
+
+      // Show motivational message
+      const message = getRandomMotivationalMessage();
+      setMotivationalMessage(message);
+      setShowMotivation(true);
+
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        setShowMotivation(false);
+      }, 5000);
 
       setShowModal(false);
       setSelectedDate("");
@@ -245,6 +305,19 @@ export default function CalendarPage() {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Motivational Message Toast */}
+      {showMotivation && (
+        <div
+          className="fixed top-8 left-1/2 transform -translate-x-1/2 z-50
+                     bg-gradient-to-r from-green-500 to-emerald-600
+                     text-white px-8 py-4 rounded-2xl shadow-2xl
+                     animate-bounce-in max-w-md text-center font-bold text-lg"
+          onClick={() => setShowMotivation(false)}
+        >
+          {motivationalMessage}
         </div>
       )}
     </div>

@@ -16,13 +16,19 @@
     "pages:dev": "npx @cloudflare/next-on-pages --watch"
   },
   "dependencies": {
+    "archiver": "^5.3.1",
+    "@types/pg": "^8.15.6",
     "firebase": "^12.4.0",
     "lucide-react": "^0.544.0",
     "mongodb": "^4.17.2",
     "mongoose": "^8.19.2",
     "next": "^15.5.2",
     "node-fetch": "^3.3.2",
+<<<<<<< HEAD
     "pdf-lib": "^1.17.1",
+=======
+    "pg": "^8.16.3",
+>>>>>>> 160749f486a45a4fa795d783a0b7f1a1efd83090
     "react": "19.1.0",
     "react-circular-progressbar": "^2.2.0",
     "react-dom": "19.1.0",

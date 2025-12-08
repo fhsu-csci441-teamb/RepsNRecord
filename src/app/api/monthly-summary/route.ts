@@ -1,7 +1,15 @@
+// written by: Caleb Millender & Honesty Beaton
+// designed by: Caleb Millender & Honesty Beaton
+// debugged by: Caleb Millender & Honesty Beaton
+
 import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/mongodb";
+<<<<<<< HEAD
 import { LogWorkout } from "@/models/workoutlogmodel";
 
+=======
+import WorkoutDay from "@/models/WorkoutDay";
+>>>>>>> 160749f486a45a4fa795d783a0b7f1a1efd83090
 
 export async function GET() {
   console.log("✅ /api/monthly-summary hit");

@@ -1,3 +1,8 @@
+// written by: Caleb Millender & Honesty Beaton
+// designed by: Caleb Millender & Honesty Beaton
+// debugged by: Caleb Millender & Honesty Beaton
+
+
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import WorkoutDay from "@/models/WorkoutDay";

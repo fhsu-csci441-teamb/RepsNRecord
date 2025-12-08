@@ -1,3 +1,8 @@
+// written by: Caleb Millender & Honesty Beaton
+// designed by: Caleb Millender & Honesty Beaton
+// debugged by: Caleb Millender & Honesty Beaton
+
+
 import mongoose, { Schema, models } from "mongoose";
 
 const WorkoutProgressSchema = new Schema({

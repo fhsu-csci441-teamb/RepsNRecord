@@ -1,3 +1,8 @@
+// written  by: Caleb Millender
+// designed by: Caleb Millender
+// debugged by: Caleb Millender
+
+
 /* ================================
    🌟 CALENDAR PAGE STYLING (FIXED)
 ================================ */
@@ -241,7 +246,7 @@
 }
 
 .form-group.third {
-  flex: 1 1 22%;
+  flex: 1 1 30%;
 }
 
 .form-group.full {
@@ -346,4 +351,27 @@
   .form-group.third {
     flex: 1 1 100%;
   }
+}
+/* ================================
+   🔥 NEW — Streak Summary Box
+================================ */
+.streak-summary {
+  width: 90%;
+  max-width: 800px;
+  background: #ff8c42;
+  color: white;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(255, 140, 66, 0.35);
+}
+
+/* ================================
+   🔥 NEW — Highlight streak days
+================================ */
+.streak-highlight {
+  border: 3px solid #facc15 !important;
+  box-shadow: 0 0 12px #facc15;
 }

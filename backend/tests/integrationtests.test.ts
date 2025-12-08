@@ -1,4 +1,9 @@
 // backend/tests/integrationtests.ts
+// Written by: Simranjit Sandhu
+// Tested by: Simranjit Sandhu
+// Debugged by: Simranjit Sandhu
+// Integration tests for WorkoutDays API
+
 import request from "supertest";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";

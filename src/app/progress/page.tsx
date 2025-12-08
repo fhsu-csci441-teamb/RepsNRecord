@@ -12,6 +12,7 @@ import {
   LabelList,
 } from "recharts";
 import { auth } from "@/lib/firebase";
+import { Download, Send, X } from "lucide-react";
 
 interface MonthData {
   month: string;
@@ -26,6 +27,13 @@ export default function ProgressPage() {
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
+  const [showExportMenu, setShowExportMenu] = useState(false);
+  const [hasTrainer, setHasTrainer] = useState(false);
+  const [sendingToTrainer, setSendingToTrainer] = useState(false);
+  const [trainerMessage, setTrainerMessage] = useState("");
+  const [showTrainerModal, setShowTrainerModal] = useState(false);
+  const [shareSuccess, setShareSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -34,6 +42,94 @@ export default function ProgressPage() {
     });
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (userId) {
+      fetch(`/api/trainer/share?visitorId=${userId}`)
+        .then(res => {
+          if (!res.ok) throw new Error('API error');
+          return res.json();
+        })
+        .then(data => setHasTrainer(data.hasTrainer || false))
+        .catch(() => setHasTrainer(false));
+    }
+  }, [userId]);
+  const handleExport = async (format: "csv" | "zip-with-photos") => {
+    if (!userId) return;
+    setExporting(true);
+    setShowExportMenu(false);
+
+    try {
+      let endpoint: string;
+      let filename: string;
+      const dateStr = new Date().toISOString().split("T")[0];
+
+      if (format === "csv") {
+        endpoint = `/api/export/csv?userId=${userId}`;
+        filename = `workouts-export-${dateStr}.csv`;
+      } else {
+        endpoint = `/api/export/zip?userId=${userId}&includePhotos=true`;
+        filename = `repsnrecord-export-${dateStr}.zip`;
+      }
+      
+      // Get Firebase token for authentication
+      const user = auth.currentUser;
+      const token = user ? await user.getIdToken() : null;
+      
+      const response = await fetch(endpoint, {
+        headers: token ? { "Authorization": `Bearer ${token}` } : {},
+      });
+      if (!response.ok) throw new Error("Export failed");
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error("Export error:", err);
+      alert("Failed to export data. Please try again.");
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const handleSendToTrainer = async () => {
+    if (!userId) return;
+    setSendingToTrainer(true);
+
+    try {
+      const response = await fetch("/api/trainer/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          clientId: userId,
+          exportType: "progress-summary",
+          message: trainerMessage || null,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setShareSuccess("Your progress has been sent to your trainer!");
+        setShowTrainerModal(false);
+        setTrainerMessage("");
+        setTimeout(() => setShareSuccess(null), 5000);
+      } else {
+        alert(data.error || "Failed to send to trainer");
+      }
+    } catch (err) {
+      console.error("Error sending to trainer:", err);
+      alert("Failed to send to trainer. Please try again.");
+    } finally {
+      setSendingToTrainer(false);
+    }
+  };
 
   useEffect(() => {
     if (authLoading) return;
@@ -111,22 +207,80 @@ export default function ProgressPage() {
               Progress Tracker
             </h1>
 
-            <div className="flex items-center gap-2">
-              <label htmlFor="year-select" className="text-sm font-medium text-gray-700">
-                Year:
-              </label>
-              <select
-                id="year-select"
-                value={year}
-                onChange={(e) => setYear(parseInt(e.target.value))}
-                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500"
-              >
-                {yearOptions.map((y) => (
-                  <option key={y} value={y}>
-                    {y}
-                  </option>
-                ))}
-              </select>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <label htmlFor="year-select" className="text-sm font-medium text-gray-700">
+                  Year:
+                </label>
+                <select
+                  id="year-select"
+                  value={year}
+                  onChange={(e) => setYear(parseInt(e.target.value))}
+                  className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                >
+                  {yearOptions.map((y) => (
+                    <option key={y} value={y}>
+                      {y}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="relative">
+                <button
+                  onClick={() => setShowExportMenu(!showExportMenu)}
+                  disabled={exporting || !userId}
+                  className="flex items-center gap-2 rounded-lg border border-pink-300 bg-white px-4 py-2 text-sm font-medium text-pink-600 shadow-sm hover:bg-pink-50 focus:outline-none focus:ring-2 focus:ring-pink-500 disabled:opacity-50"
+                  aria-expanded={showExportMenu}
+                  aria-haspopup="true"
+                >
+                  <Download className="w-4 h-4" aria-hidden="true" />
+                  {exporting ? "Exporting..." : "Export Data"}
+                </button>
+                
+                {showExportMenu && (
+                  <div className="absolute right-0 mt-2 w-64 rounded-lg border border-gray-200 bg-white shadow-lg z-10">
+                    <div className="p-2">
+                      <p className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase">Workouts Only</p>
+                      <button
+                        onClick={() => handleExport("csv")}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 rounded-md focus:outline-none focus:bg-pink-100"
+                      >
+                        Download CSV
+                        <span className="block text-xs text-gray-500">Spreadsheet format</span>
+                      </button>
+                      <hr className="my-2 border-gray-200" />
+                      <p className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase">Workouts + Photos</p>
+                      <button
+                        onClick={() => handleExport("zip-with-photos")}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 rounded-md focus:outline-none focus:bg-pink-100"
+                      >
+                        Download ZIP with Photos
+                        <span className="block text-xs text-gray-500">Includes all your progress pictures</span>
+                      </button>
+                      {hasTrainer && (
+                        <>
+                          <hr className="my-2 border-gray-200" />
+                          <p className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase">Share with Trainer</p>
+                          <button
+                            onClick={() => {
+                              setShowExportMenu(false);
+                              setShowTrainerModal(true);
+                            }}
+                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 rounded-md focus:outline-none focus:bg-pink-100 flex items-center gap-2"
+                          >
+                            <Send className="w-4 h-4" aria-hidden="true" />
+                            <div>
+                              Send to Trainer
+                              <span className="block text-xs text-gray-500">Share your progress directly</span>
+                            </div>
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -230,6 +384,74 @@ export default function ProgressPage() {
             )}
           </div>
         </div>
+
+        {shareSuccess && (
+          <div 
+            className="fixed bottom-4 right-4 p-4 bg-green-500 text-white rounded-lg shadow-lg flex items-center gap-3 animate-pulse"
+            role="alert"
+          >
+            <Send className="w-5 h-5" aria-hidden="true" />
+            {shareSuccess}
+          </div>
+        )}
+
+        {showTrainerModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-gray-800">Send to Trainer</h3>
+                <button
+                  onClick={() => setShowTrainerModal(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full"
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" aria-hidden="true" />
+                </button>
+              </div>
+              
+              <p className="text-gray-600 mb-4">
+                Your trainer will receive a summary of your workout progress including your recent workouts and stats.
+              </p>
+
+              <div className="mb-4">
+                <label htmlFor="trainer-message" className="block text-sm font-medium text-gray-700 mb-1">
+                  Add a message (optional)
+                </label>
+                <textarea
+                  id="trainer-message"
+                  value={trainerMessage}
+                  onChange={(e) => setTrainerMessage(e.target.value)}
+                  placeholder="Hey coach, check out my progress this week!"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent resize-none"
+                  rows={3}
+                />
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowTrainerModal(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSendToTrainer}
+                  disabled={sendingToTrainer}
+                  className="flex-1 px-4 py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-lg hover:from-pink-600 hover:to-orange-600 font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {sendingToTrainer ? (
+                    "Sending..."
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" aria-hidden="true" />
+                      Send
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </AuthGuard>
   );
