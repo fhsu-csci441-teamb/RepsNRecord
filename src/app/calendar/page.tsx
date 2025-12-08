@@ -7,11 +7,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { auth } from "@/lib/firebase";
 import "./calendar.css";
-<<<<<<< HEAD
 import toast, { Toaster } from "react-hot-toast";
-=======
 import { getRandomMotivationalMessage } from "@/lib/motivationalMessages";
->>>>>>> 160749f486a45a4fa795d783a0b7f1a1efd83090
 
 export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -43,23 +40,12 @@ export default function CalendarPage() {
   const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
   const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
 
-<<<<<<< HEAD
-  // Fetch logged workouts (with userId header)
-  const fetchWorkouts = async () => {
-    try {
-      const res = await fetch("/api/workouts", {
-        headers: { "userId": "demo-user" }
-      });
-      if (!res.ok) throw new Error("Failed to fetch workouts");
-      const data = await res.json();
-      setLoggedDays(data.map((w: { date: string }) => w.date));
-=======
-useEffect(() => {
-  const unsubscribe = auth.onAuthStateChanged((user) => {
-    setUserId(user?.uid || null);
-  });
-  return () => unsubscribe();
-}, []);
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUserId(user?.uid || null);
+    });
+    return () => unsubscribe();
+  }, []);
 
   interface Workout {
     userId?: string;
@@ -79,7 +65,6 @@ useEffect(() => {
       if (!res.ok) throw new Error("Failed to fetch workouts");
       const data = await res.json();
       setLoggedDays(data.map((w: Workout) => w.date));
->>>>>>> 160749f486a45a4fa795d783a0b7f1a1efd83090
     } catch (err) {
       console.error("Error fetching workouts:", err);
     }
@@ -107,13 +92,8 @@ useEffect(() => {
 
   useEffect(() => {
     fetchWorkouts();
-<<<<<<< HEAD
     fetchStreak();
-  }, []);
-=======
   }, [fetchWorkouts]);
-
->>>>>>> 160749f486a45a4fa795d783a0b7f1a1efd83090
 
   // Achievement popups
   useEffect(() => {
