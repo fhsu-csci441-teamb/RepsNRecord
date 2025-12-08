@@ -1,10 +1,10 @@
+// written by: Amanda Lyons
+// designed by: Amanda Lyons
+// debugged by: Amanda Lyons
+
 "use client";
 
-<<<<<<< HEAD
-import { useEffect, Suspense } from "react";
-=======
-import { useEffect, useState } from "react";
->>>>>>> 160749f486a45a4fa795d783a0b7f1a1efd83090
+import { useEffect, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signInWithPopup, signOut } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";

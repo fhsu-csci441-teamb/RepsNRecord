@@ -1,3 +1,7 @@
+// written by: Amanda Lyons
+// designed by: Amanda Lyons
+// debugged by: Amanda Lyons
+
 "use client";
 import AuthGuard from "@/components/AuthGuard";
 import { useState, useEffect } from "react";
